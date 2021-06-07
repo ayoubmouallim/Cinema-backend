@@ -32,7 +32,7 @@ public class CinemaRestController {
           return filmRepository.findAll();
       }
 
-      @GetMapping(path = "/imageFilm/{id}",produces = MediaType.IMAGE_PNG_VALUE)  // default is Application_json
+      @GetMapping(path = "/imageFilm/{id}",produces = MediaType.IMAGE_JPEG_VALUE)  // default is Application_json
     public byte[] image(@PathVariable(name = "id") Long id) throws IOException {
           Film f=filmRepository.findById(id).get();
           File file = new File(System.getProperty("user.home")+"/cinema/images/"+f.getPhoto());

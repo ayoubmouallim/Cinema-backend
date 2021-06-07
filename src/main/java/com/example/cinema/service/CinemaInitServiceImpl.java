@@ -78,7 +78,7 @@ public class CinemaInitServiceImpl implements ICinemaInitService{
     @Override
     public void initSeances() {
         DateFormat dateFormat = new SimpleDateFormat("HH:mm");
-        Stream.of("10:00","12:00","15:00","17:00","20:00").forEach(heure->{
+        Stream.of("10:00","15:00","17:00").forEach(heure->{
             Seance seance =  new Seance();
             try {
                 seance.setHeureDebut(dateFormat.parse(heure));
@@ -110,7 +110,7 @@ public class CinemaInitServiceImpl implements ICinemaInitService{
          Film film = new Film();
          film.setTitre(titre);
          film.setDuree(durees[new Random().nextInt(durees.length)]);
-         film.setPhoto(titre.replace(" ","")+".png");
+         film.setPhoto(titre.replace(" ","")+".jpg");
          film.setCategorie(categories.get(new Random().nextInt(categories.size())));
         filmRepository.save(film);
         });
@@ -136,15 +136,15 @@ public class CinemaInitServiceImpl implements ICinemaInitService{
     @Override
     public void initProjections() {
         double []prix = new double[]{40,50,60,70,80,90};
-
+        List<Film> films = filmRepository.findAll();
         villeRepository.findAll().forEach(ville->{
             ville.getCinemas().forEach(cinema->{
                 cinema.getSalles().forEach(salle->{
-                    filmRepository.findAll().forEach(film -> {
+                    int i = new Random().nextInt(films.size());
                         seanceRepository.findAll().forEach(seance -> {
                             Projection projection = new Projection();
                             projection.setSeance(seance);
-                            projection.setFilm(film);
+                            projection.setFilm(films.get(i));
                             projection.setSalle(salle);
                             projection.setDateProjection(new Date());
                             projection.setPrix(prix[new Random().nextInt(prix.length)]);
@@ -154,7 +154,7 @@ public class CinemaInitServiceImpl implements ICinemaInitService{
                     });
                 });
             });
-        });
+
 
     }
 
